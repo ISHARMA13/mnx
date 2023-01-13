@@ -112,7 +112,6 @@ int do_fork()
   /* Find a free pid for the child and put it in the table. */
   new_pid = get_free_pid();
   rmc->mp_pid = new_pid;	/* assign pid to child */
-  printf("Minix: PID %d created", (int)new_pid);
 
   memset(&m, 0, sizeof(m));
   m.m_type = VFS_PM_FORK;
@@ -236,15 +235,12 @@ int do_exit()
   * do not use PM's exit() to terminate. If they try to, we warn the user
   * and send a SIGKILL signal to the system process.
   */
-  int pid=(int)mp->mp_pid;
   if(mp->mp_flags & PRIV_PROC) {
-    printf("Minix: PID %d exited", (int)pid);
       printf("PM: system process %d (%s) tries to exit(), sending SIGKILL\n",
           mp->mp_endpoint, mp->mp_name);
       sys_kill(mp->mp_endpoint, SIGKILL);
   }
   else {
-    printf("Minix: PID %d exited", (int)pid);
       exit_proc(mp, m_in.m_lc_pm_exit.status, FALSE /*dump_core*/);
   }
   
